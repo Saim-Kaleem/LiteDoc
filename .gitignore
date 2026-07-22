@@ -1,8 +1,17 @@
+# --- Python ---
 __pycache__/
 *.py[cod]
 *.egg-info/
+*.egg
+build/
+dist/
+.eggs/
+.venv/
+venv/
+env/
 .ipynb_checkpoints/
-# large / generated artifacts
+
+# --- Large / generated model artifacts ---
 checkpoints/
 artifacts/
 results/
@@ -11,7 +20,17 @@ cka_heatmaps/
 *.bin
 *.safetensors
 hf_cache/
-# data (bring your own benchmark splits)
+
+# --- Cluster / SLURM ---
+# job stdout/stderr written next to the sbatch scripts (%x-%j.out)
+*.out
+slurm-*.out
+slurm/*.out
+# per-stage caches + verification report live under the work dir
+data/work/
+*.log
+
+# --- Benchmark data (bring your own splits; keep the shipped pruning json) ---
 data/docvqa/
 data/funsd/
 data/cord/
@@ -19,3 +38,11 @@ data/sroie/
 data/infovqa/
 data/wtq/
 data/rvlcdip/
+
+# --- Editor / OS ---
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db

@@ -1,0 +1,37 @@
+name: ci
+
+# Fast sanity checks that need no GPU, model weights, or heavy deps (torch).
+# Byte-compiles all Python and syntax-checks every shell / SLURM script, so a
+# broken push is caught before it reaches the cluster.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Byte-compile all Python
+        run: python -m compileall -q litedoc deepseek_vl2 tests slurm/prefetch_models.py
+
+      - name: Syntax-check shell + SLURM scripts
+        run: |
+          for f in slurm/*.sh slurm/*.sbatch scripts/*.sh; do
+            echo "checking $f"; bash -n "$f"
+          done
+
+      - name: Assert LF line endings (no CRLF) on cluster scripts
+        run: |
+          if grep -rlU $'\r' slurm scripts litedoc 2>/dev/null | grep .; then
+            echo "CRLF found in files above"; exit 1
+          fi
+          echo "all LF"

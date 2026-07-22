@@ -1,0 +1,31 @@
+# Normalize all text to LF in the repo. Critical for HPC: a shell script or
+# .sbatch committed with Windows CRLF fails on Linux with
+#   /usr/bin/env: 'bash\r': No such file or directory
+* text=auto eol=lf
+
+# Force LF explicitly on everything that runs on the cluster.
+*.sh      text eol=lf
+*.sbatch  text eol=lf
+*.py      text eol=lf
+*.yaml    text eol=lf
+*.yml     text eol=lf
+*.json    text eol=lf
+*.md      text eol=lf
+*.txt     text eol=lf
+*.cfg     text eol=lf
+*.toml    text eol=lf
+Makefile  text eol=lf
+
+# Jupyter notebooks are JSON but noisy to diff; keep as text, no EOL munging.
+*.ipynb   text eol=lf
+
+# Treat true binaries as binary (none currently shipped, but future-proof).
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.ico     binary
+*.ttc     binary
+*.ttf     binary
+*.pt      binary
+*.bin     binary
+*.safetensors binary

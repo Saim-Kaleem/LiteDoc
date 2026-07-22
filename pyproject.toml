@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "litedoc"
+version = "1.0.0"
+description = "Distilling large document VLMs into efficient task-specific encoders via CKA expert pruning + Sparse-to-Sparse distillation."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Saim Kaleem" }]
+keywords = ["mixture-of-experts", "vision-language", "document-understanding",
+            "pruning", "knowledge-distillation", "deepseek-vl2"]
+
+# Kept in sync with requirements.txt / requirements-hpc.txt. transformers is
+# pinned: the vendored modeling code relies on 4.38.2 internals.
+dependencies = [
+    "torch>=2.2,<2.7",
+    "transformers==4.38.2",
+    "xformers>=0.0.21",
+    "timm>=0.9.16",
+    "accelerate",
+    "sentencepiece",
+    "attrdict",
+    "einops",
+    "numpy<2",
+    "matplotlib",
+    "huggingface_hub",
+    "tqdm>=4.64.0",
+]
+
+[project.urls]
+Repository = "https://github.com/Saim-Kaleem/LiteDoc"
+
+[project.scripts]
+litedoc-profile  = "litedoc.profile_cka:main"
+litedoc-prune    = "litedoc.prune:main"
+litedoc-distill  = "litedoc.distill:main"
+litedoc-evaluate = "litedoc.evaluate:main"
+
+[tool.setuptools]
+packages = ["litedoc", "deepseek_vl2", "deepseek_vl2.models", "deepseek_vl2.utils"]
+
+[tool.setuptools.package-data]
+litedoc = ["../data/*.json"]
