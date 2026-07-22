@@ -1,0 +1,21 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+# large / generated artifacts
+checkpoints/
+artifacts/
+results/
+cka_heatmaps/
+*.pt
+*.bin
+*.safetensors
+hf_cache/
+# data (bring your own benchmark splits)
+data/docvqa/
+data/funsd/
+data/cord/
+data/sroie/
+data/infovqa/
+data/wtq/
+data/rvlcdip/

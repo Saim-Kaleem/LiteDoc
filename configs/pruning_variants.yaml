@@ -1,0 +1,53 @@
+# LiteDoc student configurations (paper Table 1).
+# `keep_ratio` is the fraction of routed experts RETAINED per MoE layer and is
+# the value passed to `python -m litedoc.prune --keep_ratio ...`.
+# Teacher: DeepSeek-VL2 Tiny -- 3.37B params, 64 routed experts/layer, top-6,
+# 11 prunable MoE layers (block 12 reserved for generative decoding), d=768.
+
+teacher:
+  name: deepseek-ai/deepseek-vl2-tiny
+  routed_experts_per_layer: 64
+  shared_experts_per_layer: 2
+  top_k: 6
+  prunable_moe_layers: 11
+  hidden_dim: 768
+  params: 3.37B
+
+variants:
+  litedoc-60:
+    keep_ratio: 0.60
+    pruning: 40%
+    experts_per_layer: ~38
+    params: 2.4B
+    compression: 1.4x
+  litedoc-40:
+    keep_ratio: 0.40
+    pruning: 60%
+    experts_per_layer: ~26
+    params: 1.9B
+    compression: 1.8x
+  litedoc-30:
+    keep_ratio: 0.30
+    pruning: 70%
+    experts_per_layer: ~19
+    params: 1.7B
+    compression: 2.0x
+  litedoc-20:
+    keep_ratio: 0.20
+    pruning: 80%
+    experts_per_layer: ~13
+    params: 1.4B
+    compression: 2.4x   # headline: retains 89.6% of teacher across 7 benchmarks
+
+# CKA profiling
+cka:
+  tau_moderate: 0.7      # fewer, tighter redundancy cliques
+  tau_aggressive: 0.5    # broader functional overlap -> more pruning
+  num_prompts_for_cka: 200
+  kernel: rbf            # paper default (median-heuristic sigma); linear also supported
+
+# Distillation objective (paper Sec. 3.3; ablation DocVQA: KL 81.7 / hidden 82.9 / both 84.2)
+distillation:
+  alpha_kl: 1.0
+  beta_hidden: 1.0
+  temperature: 1.0

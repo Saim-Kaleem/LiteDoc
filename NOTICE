@@ -1,0 +1,17 @@
+LiteDoc
+=======
+This repository consolidates the LiteDoc research code ("Distilling Large
+Document Models into Efficient Task-Specific Encoders").
+
+Third-party code
+----------------
+The `deepseek_vl2/` package is derived from DeepSeek-VL2
+(https://github.com/deepseek-ai/DeepSeek-VL2), (c) 2023-2024 DeepSeek, MIT License.
+LiteDoc modifies two parts of the model code:
+  * deepseek_vl2/models/modeling_deepseek.py -- MoEGate gains a `valid_expert_mask`
+    buffer + masked routing, and DeepseekV2MoE gains a `cka_tracking` /
+    `_expert_activations` hook for Stage-1 profiling.
+All other files under `deepseek_vl2/` are upstream DeepSeek-VL2 (unmodified).
+
+The LiteDoc-specific pipeline (`litedoc/`, `data/`, `scripts/`, `configs/`,
+`tests/`) is the contribution of this project.

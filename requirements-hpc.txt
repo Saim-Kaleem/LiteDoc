@@ -1,0 +1,22 @@
+# LiteDoc -- HPC / cluster requirements (Elwetritsch, RPTU).
+# Native Conda env (python=3.11). torch comes from PyPI CUDA wheels, so NO CUDA
+# module is needed; the V100 node's driver provides libcuda.
+#
+# Pins kept off the Blackwell `dgx` nodes: torch 2.2.x (those need torch 2.7+/
+# CUDA 12.8+). transformers MUST stay 4.38.2 -- the vendored modeling code relies
+# on its internals.
+
+torch==2.2.2
+torchvision==0.17.2
+transformers==4.38.2
+xformers==0.0.25
+timm>=0.9.16
+accelerate
+sentencepiece
+attrdict
+einops
+numpy<2
+matplotlib
+huggingface_hub
+tqdm>=4.64.0
+# No gradio / serve deps: the interactive demo is not part of batch reproduction.
