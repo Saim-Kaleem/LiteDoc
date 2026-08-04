@@ -67,12 +67,19 @@ def test_valid_expert_mask():
 
 
 def test_cka_tracking_hook():
-    """The Stage-1 profiler relies on cka_tracking populating _expert_activations."""
-    moe = DeepseekV2MoE(MockConfig())
+    """The Stage-1 profiler relies on cka_tracking populating _expert_activations.
+
+    Capture happens inside DeepseekV2MoE.moe_infer, which forward() only calls in
+    EVAL mode (the training branch uses a separate per-expert loop with no hook).
+    So we profile with the module in eval + no_grad -- exactly how
+    litedoc.profile_cka runs the teacher during generation.
+    """
+    moe = DeepseekV2MoE(MockConfig()).eval()
     assert hasattr(moe, "cka_tracking"), "MoE missing cka_tracking flag"
     moe.cka_tracking = True
     moe._expert_activations = [None] * len(moe.experts)
-    moe(torch.randn(1, 8, 128))
+    with torch.no_grad():
+        moe(torch.randn(1, 8, 128))
     captured = [a for a in moe._expert_activations if a is not None and a.numel() > 0]
     assert captured, "cka_tracking did not capture any expert activations"
 
