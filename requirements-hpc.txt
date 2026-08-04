@@ -15,7 +15,7 @@ accelerate
 sentencepiece
 attrdict
 einops
-numpy<2
+numpy==1.26.4
 matplotlib
 huggingface_hub
 tqdm>=4.64.0
